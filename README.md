@@ -15,4 +15,7 @@ allow users to keep track of tasks to be done and their status.
 
 ## Collaborative Efforts 
 Marisha Hoza  
-Nick Paro
+Nick Paro  
+Trevor Dobson  
+Matt Stuhring  
+Brandon Hunrrington
