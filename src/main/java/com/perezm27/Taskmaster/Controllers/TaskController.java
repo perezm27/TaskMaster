@@ -2,9 +2,11 @@ package com.perezm27.Taskmaster.Controllers;
 
 import com.perezm27.Taskmaster.Models.Task;
 import com.perezm27.Taskmaster.Models.UserHistory;
+import com.perezm27.Taskmaster.Repository.S3Client;
 import com.perezm27.Taskmaster.Repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,6 +15,13 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("/api/v1")
 public class TaskController {
+
+    private S3Client s3Client;
+
+    @Autowired
+    TaskController(S3Client s3Client) {
+        this.s3Client = s3Client;
+    }
 
     @Autowired
     TaskRepository taskRepository;
@@ -50,6 +59,20 @@ public class TaskController {
         newTask.addUserHistory(userHistory);
         taskRepository.save(newTask);
         return newTask;
+    }
+
+    @PostMapping("/tasks/{id}/images")
+    public Task uploadImg(
+        @PathVariable String id,
+//        @RequestParam("IMG") String IMG,
+        @RequestPart(value = "file")MultipartFile file){
+
+        String IMG = this.s3Client.uploadFile(file);
+        Task task = new Task();
+        task.setIMG(IMG);
+
+        taskRepository.save(task);
+        return task;
     }
 
 
