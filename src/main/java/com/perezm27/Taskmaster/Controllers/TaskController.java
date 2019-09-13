@@ -62,13 +62,10 @@ public class TaskController {
     }
 
     @PostMapping("/tasks/{id}/images")
-    public Task uploadImg(
-        @PathVariable String id,
-//        @RequestParam("IMG") String IMG,
-        @RequestPart(value = "file")MultipartFile file){
+    public Task uploadImg(@PathVariable String id, @RequestPart(value = "file")MultipartFile file){
 
         String IMG = this.s3Client.uploadFile(file);
-        Task task = new Task();
+        Task task = taskRepository.findById(id).get();
         task.setIMG(IMG);
 
         taskRepository.save(task);
